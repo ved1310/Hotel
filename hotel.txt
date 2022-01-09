@@ -1,0 +1,291 @@
+
+#include<iostream.h>
+#include<conio.h>
+#include<fstream.h>
+#include<stdio.h>
+#include<dos.h>
+class hotel
+{
+  int room_no;
+  char name[30];
+  char address[50];
+  char phone[10];
+    public:
+    void main_menu();
+    void add();
+    void display();
+    void rooms();
+    void edit();
+    int check(int);
+    void delete_rec(int);
+    void modify(int);
+  };
+  void hotel::main_menu()
+  {
+    int choice;
+    while(choice!=5)
+   {
+     clrscr();
+     cout<<"\n\t\t\t\t###################################\n";
+     cout<<"\n\t\t\t\t\tMAIN MENU\n    ";
+     cout<<"\n\t\t\t\t###################################\n";
+     cout<<"\n\n\n\t\t\t\n1.BOOK A ROOM";
+     cout<<"\n\t\t\t\n2.CUSTOMER RECORD";
+     cout<<"\n\t\t\t\n3.ROOMS ALLOTED";
+     cout<<"\n\t\t\t\n4.EDIT RECORD";
+     cout<<"\t\n\t\t\t\n5.EXIT";
+     cout<<"\n\n\t\t\nENTER YOUR CHOICE:";
+     cin>>choice;
+     switch(choice)
+    {
+
+     case 1:add();
+     break;
+     case 2:display();
+     break;
+     case 3:rooms();
+     break;
+     case 4:edit();
+     break;
+     case 5:break;
+     default:
+     {
+      cout<<"\n\n\t\t\t WRONG CHOICE!!!!";
+      cout<<"\n\t\t\t PRESS ANY KEY TO CONTINUE !!";
+      getch();
+      }
+      }
+      }
+      }
+      void hotel::add()
+      {
+       clrscr();
+       int r,flag;
+       ofstream fout("p.dat",ios::app);
+       cout<<"\n************************";
+       cout<<"\nENTER CUSTOMER DETAILS:";
+       cout<<"\n************************";
+       cout<<"\n\nROOM NO:";
+       cin>>r;
+       flag=check(r);
+       if(flag)
+       cout<<"\n SORRY !!!!!! ROOM IS ALREADTY BOOKED";
+       else
+       {
+	room_no=r;
+	cout<<"\nNAME :- ";
+	gets(name);
+	cout<<"\nADDRESS :- ";
+	gets(address);
+	cout<<"\nPHONE NO :- ";
+	gets(phone);
+	cout<<"\n*******************************";
+	fout.write((char*)this,sizeof(hotel));
+
+	cout<<"\n ROOM IS BOOKED!!!!!!!!";
+	}
+	cout<<"\n PRESS ANY KEY TO COMNTINUE";
+	getch();
+	fout.close();
+
+	}
+	void hotel::display()
+	{
+	 clrscr();
+	 ifstream fin("p.dat",ios::in);
+
+	 int r,flag;
+	 cout<<"\n ENTER THE ROOM NO:  ";
+	 cin>>r;
+	 while(!fin.eof())
+	{
+	 fin.read((char*)this,sizeof(hotel));
+
+	 if(room_no==r)
+	 {
+	   clrscr();
+
+	   cout<<"\n CUSTOMER DETAILS: :";
+	   cout<<"\n**********************";
+	   cout<<"\n\n ROOM NO : "<<room_no;
+	   cout<<"\n NAME :"<<name;
+	   cout<<"\n ADDRESS :"<<address;
+	   cout<<"\n PHONE NO :"<<phone;
+	   cout<<"\n***********************";
+	   flag=1;
+	   break;
+	   }
+
+	   }
+
+	   if(flag==0)
+	   cout<<"\n\n SORRY!!!!! ROOM NO NOT FOUND";
+	   cout<<"\n PRESS ANY KEY TO CONTINUE";
+	   getch();
+	   fin.close();
+	   }
+	   void hotel::rooms()
+	   {
+	    clrscr();
+	    ifstream fin("p.dat",ios::in);
+	    cout<<"\n\n____________________________________________________________________";
+	    cout<<"\n______________________________________________________________________";
+	    cout<<"\n\t\t\t\n\t\t\t LIST OF ROOMS ALLOTED";
+	    cout<<"\n\n____________________________________________________________________";
+	    cout<<"\n_____________________________________________________________________";
+	    cout<<"\n\nROOM NO\t\tNAME\t\tADDRESS\t\tPHONE NO\n";
+	    while(!fin.eof())
+	       {
+		   fin.read((char*)this,sizeof(hotel));
+		   cout<<"\n______________________________________________________________";
+		  cout<<"\n"<<room_no<<"\t\t"<<name;
+		  cout<<"\t\t"<<address<<"\t\t"<<phone;
+		  cout<<"\n________________________________________________________________";
+		}
+
+	     cout<<"\n\n\n\n\t\t\t PRESS ANY KEY TO CONTINUE ";
+	     getch();
+	     fin.close();
+
+	     }
+	     void hotel::edit()
+	     {
+	      clrscr();
+	      int choice,r;
+	      cout<<"\n\n EDIT MENU ";
+	      cout<<"\n\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$";
+	      cout<<"\n\n1. MODIFY CUSTOMER RECORD ";
+	      cout<<"\n\n 2. DELETE CUSTOMER RECORD";
+	      cout<<"\n\n ENTER YOUR CHOICE:";
+	      cin>>choice;
+	      cout<<"\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$";
+	      clrscr();
+
+	      switch(choice)
+	      {
+	       case 1:modify(r);
+	       break;
+
+	       case 2:delete_rec(r);
+	       break;
+
+
+	       default:cout<<"\n WRONG CHOICE!!!";
+	       }
+	       cout<<"\n\n PRESS ANY KEY TO CONTINIUE ";
+	       getch();
+	       }
+	       int hotel::check(int r)
+	       {
+		int flag=0;
+		ifstream fin("p.dat",ios::in);
+		while(!fin.eof())
+
+		 {
+		  fin.read((char*)this,sizeof(hotel));
+		  if(room_no==r)
+		  {
+		  flag=1;
+		  break;
+		  }
+		 }
+		  fin.close();
+		  return(flag);
+		  }
+		  void hotel::modify(int r)
+		  {
+
+		   long pos, flag=0;
+		   fstream file("p.dat",ios::in|ios::out|ios::binary);
+		   while(!file.eof())
+		      {
+		       pos=file.tellg();
+		       file.read((char*)this,sizeof(hotel));
+			 cout<<"\n ENTER ROOM NO TO MODIFY:";
+		     cin>>r;
+		    if(room_no==r)
+		    {
+		     cout<<"\n ENTER NEW DETAILS:";
+		     cout<<"\n NAME:";
+		     gets(name);
+		     cout<<"\n ADDRESS:";
+		     gets(address);
+		     cout<<"\n PHONE NO:";
+		     gets(phone);
+		      file.seekg(pos);
+		      file.write((char*)this,sizeof(hotel));
+		     cout<<"\nRECORD IS MODIFIED ";
+		     flag=1;
+		     break;
+		     }
+		   }
+		     if(flag==0)
+		     cout<<"\n ROOM NO NOT FOUND";
+		     file.close();
+		     }
+
+		     void hotel::delete_rec(int r)
+		     {    int flag=0;
+			  char ch;
+		      ifstream fin("p.dat",ios::in);
+		      ofstream fout("temp.dat",ios::out);
+		      while(!fin.eof())
+		      {
+		       fin.read((char*)this,sizeof(hotel));
+			cout<<"enter the room no:"<<endl;
+			cin>>r;
+		       if(room_no==r)
+		       {
+			cout<<"\n NAME:  "<<name;
+			cout<<"\n ADDRESS: "<<address;
+			cout<<"\n PHONE NO: "<<phone;
+			cout<<"\n DO YOU WANT TO DELETE THIS RECORD:(y/n):";
+			cin>>ch;
+			if(ch=='n')
+			fout.write((char*)this,sizeof(hotel));
+			flag=1;
+			}
+			else
+			 fout.write((char*)this,sizeof(hotel));
+			 }
+			 fin.close();
+			 fout.close();
+			 if(flag==0)
+			 cout<<"\n SORRY!!!!!!! ROOM NO NOT VACANT!";
+			 else
+			 {
+			  remove("p.dat");
+			  rename("temp.dat","p.dat");
+			  }
+			  }
+
+			  void main()
+			  {
+			   hotel h;
+			   textmode(C80);
+			   textcolor(GREEN);
+			   clrscr();
+			   cout<<"\n\t\t\t                ";
+			   cout<<"\n";
+			   cout<<"\n\t\t\t    HOTEL MANAGEMENT PROJECT";
+			   cout<<"\n";
+			   cout<<"\n\t\t\t                 "<<endl;
+			   sleep(2);
+			   cout<<"\n***********************************************";
+			   cout<<"\n\n UNDER THE GUIDANCE OF: H.F KHAN Mam";
+			   sleep(2);
+			   cout<<"\n\n\nMADE BY :"<<endl;
+			   sleep(2);
+			   cout<<"\n 1807010 : Vedant Dhakne"<<endl;
+			   sleep(2);
+			   cout<<"\n 1807012 : Harshada Gaikwad "<<endl;
+			   sleep(2);
+			   cout<<"\n1807013 : Priti Garad "<<endl;
+			   cout<<"\n**********************************************";
+
+			   sleep(2);
+			   cout<<"\n\nPRESS ANY KEY TO CONTINUE"<<endl;
+			   getch();
+			   h.main_menu();
+			   }
+
