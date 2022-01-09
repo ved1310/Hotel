@@ -277,10 +277,6 @@ class hotel
 			   cout<<"\n\n\nMADE BY :"<<endl;
 			   sleep(2);
 			   cout<<"\n 1807010 : Vedant Dhakne"<<endl;
-			   sleep(2);
-			   cout<<"\n 1807012 : Harshada Gaikwad "<<endl;
-			   sleep(2);
-			   cout<<"\n1807013 : Priti Garad "<<endl;
 			   cout<<"\n**********************************************";
 
 			   sleep(2);
